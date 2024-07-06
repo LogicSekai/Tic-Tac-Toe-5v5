@@ -1,8 +1,9 @@
 @import './base.css';
 
 #app {
+  font-family: Poppins;
   font-weight: normal;
   height: 100vh;
-  background: url(https://i.pinimg.com/originals/1e/bd/62/1ebd62592ece9c36f32347098a8ddb21.gif) no-repeat;
+  /* background: url(https://i.pinimg.com/originals/1e/bd/62/1ebd62592ece9c36f32347098a8ddb21.gif) no-repeat; */
   background-size: cover;
 }
