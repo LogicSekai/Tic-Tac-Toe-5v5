@@ -63,7 +63,7 @@ import HelloWorld from './components/HelloWorld.vue'
               </svg></div>
             <div class="mode">Player vs Player</div>
           </div>
-          <div class="play">
+          <div class="play" @click="startSearchMatch_5v5">
             <div class="icon"><svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -76,7 +76,52 @@ import HelloWorld from './components/HelloWorld.vue'
       </div>
     </div>
   </div>
+  <div v-if="searchMatch_5v5" class="search-match">
+    <div class="container">
+      <div>Mencari pemain</div>
+      <div class="timer">{{ formattedTime }}</div>
+    </div>
+  </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      searchMatch_5v5: false,
+      searchMatch_5v5_minutes: 0,
+      searchMatch_5v5_seconds: 0,
+      timerInterval: null
+    }
+  },
+  computed: {
+    formattedTime() {
+      const formattedMinutes = String(this.searchMatch_5v5_minutes).padStart(2, '0')
+      const formattedSeconds = String(this.searchMatch_5v5_seconds).padStart(2, '0')
+      return `${formattedMinutes}:${formattedSeconds}`
+    }
+  },
+  methods: {
+    startSearchMatch_5v5(){
+      if (this.timerInterval) return
+      this.searchMatch_5v5 = true
+
+      this.timerInterval = setInterval(() => {
+        this.searchMatch_5v5_seconds++
+        if (this.searchMatch_5v5_seconds === 60) {
+          this.searchMatch_5v5_minutes++
+          this.searchMatch_5v5_seconds = 0
+        }
+      }, 1000)
+    },
+    stopSearchMatch_5v5() {
+      clearInterval(this.timerInterval)
+      this.timerInterval = null
+      this.searchMatch_5v5 = false
+    }
+  }
+}
+</script>
 
 <style scoped>
 .section{
@@ -102,7 +147,7 @@ import HelloWorld from './components/HelloWorld.vue'
   align-items: center;
 }
 
-.container{
+.lobby.container{
   position: relative;
   margin: auto;
 }
@@ -174,9 +219,66 @@ import HelloWorld from './components/HelloWorld.vue'
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  transition: 300ms;
+}
+
+.play-mode .play:hover{
+  background: #3d3362;
 }
 
 .play-mode .play .icon{
   margin-right: 10px;
+}
+
+.search-match{
+  position: fixed;
+  left: 50%;
+  margin-left: -160px;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: showSearchMatch .4s;
+}
+
+@keyframes showSearchMatch {
+  0%{
+    bottom: -80px;
+    margin-left: -150px;
+  } 100% {
+    bottom: 20px;
+    margin-left: -160px;
+  }
+}
+
+.search-match .container{
+  width: 320px;
+  height: 80px;
+  border-radius: 12px;
+  color: #ffffff;
+  text-align: center;
+  background: #3d3362;
+  animation: containerSearchMatch .4s;
+}
+
+@keyframes containerSearchMatch{
+  0% {
+    width: 300px;
+    height: 60px;
+  } 100% {
+    width: 320px;
+    height: 80px;
+  }
+}
+
+.search-match .container div:nth-child(1){
+  padding: 6px;
+}
+.search-match .container .timer{
+  padding: 6px;
+  font-size: x-large;
+  border-radius: 12px;
+  background: #674fc7;
 }
 </style>
